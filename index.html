@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractor Ethics Check</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <svg width="26" height="28" viewBox="0 0 26 28" fill="none" aria-hidden="true"><path d="M13 1 2 5v8c0 7 4.7 12 11 14 6.3-2 11-7 11-14V5L13 1Z" stroke="#fff" stroke-width="2"/><path d="m8 14 3.5 3.5L18 11" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Contractor Authorization
+    </div>
+    <small>Ethics &amp; compliance analysis</small>
+  </div>
+</header>
+
+<main>
+  <div class="head">
+    <div>
+      <h1>Contractor Ethics Check</h1>
+      <p class="sub">Score each contractor on seven compliance areas. Critical red flags override the score.</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn ghost" id="resetBtn" type="button">Restore sample data</button>
+      <button class="btn" id="addBtn" type="button">+ Analyze contractor</button>
+    </div>
+  </div>
+
+  <section class="kpis" aria-label="Summary">
+    <div class="kpi"><div class="dot" style="background:var(--accent-soft);color:var(--accent)">Σ</div><div><b id="kTotal">0</b><span>Contractors analyzed</span></div></div>
+    <div class="kpi"><div class="dot" style="background:var(--good-soft);color:var(--good)">✓</div><div><b id="kGood">0</b><span>Ethical (score ≥ 75)</span></div></div>
+    <div class="kpi"><div class="dot" style="background:var(--warn-soft);color:var(--warn)">!</div><div><b id="kWarn">0</b><span>Needs review (50–74)</span></div></div>
+    <div class="kpi"><div class="dot" style="background:var(--bad-soft);color:var(--bad)">✕</div><div><b id="kBad">0</b><span>Not ethical (&lt; 50 or red flag)</span></div></div>
+  </section>
+
+  <div class="grid2">
+    <section class="panel">
+      <div class="panel-h"><h2>Ethics score by contractor</h2><span class="hint">0–100 · dashed lines mark the 50 and 75 thresholds</span></div>
+      <div class="chart-box"><canvas id="barChart" aria-label="Bar chart of ethics scores"></canvas></div>
+    </section>
+    <section class="panel">
+      <div class="panel-h"><h2>Result breakdown</h2><span class="hint" id="donutHint"></span></div>
+      <div class="chart-box"><canvas id="donutChart" aria-label="Donut chart of verdicts"></canvas></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <div class="panel-h"><h2>Analysis results</h2><span class="hint">Select a row to see its detailed profile</span></div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>ID</th><th>Contractor</th><th>Department</th><th>Score</th><th>Verdict</th><th>Red flags</th><th></th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="grid2">
+    <section class="panel">
+      <div class="panel-h"><h2 id="dTitle">Contractor profile</h2><span id="dPill"></span></div>
+      <div class="chart-box sm"><canvas id="radarChart" aria-label="Radar chart of criteria scores"></canvas></div>
+    </section>
+    <section class="panel detail">
+      <h2>Why this verdict</h2>
+      <div class="crit-list" id="critList"></div>
+      <ul class="flags" id="flagList"></ul>
+    </section>
+  </div>
+
+  <section class="panel method">
+    <h2 style="color:var(--ink)">How the score works</h2>
+    <p>Each area is rated 0–10 and weighted: Safety record 20%, Licensing &amp; permits 15%, Labor &amp; worker rights 20%, Anti-bribery &amp; conflicts of interest 15%, Environmental compliance 10%, Payment &amp; contract integrity 10%, Complaint history 10%. The weighted total is scaled to 100.</p>
+    <p>Verdict: <b>Ethical</b> at 75 or above, <b>Needs review</b> from 50 to 74, <b>Not ethical</b> below 50. Any confirmed critical red flag (bribery, forged documents, child or forced labor, fatal safety violation) makes the verdict <b>Not ethical</b> regardless of score.</p>
+    <p class="hint">Sample contractors are fictional examples. Contractors you add are saved in this browser only.</p>
+  </section>
+</main>
+
+<dialog id="dlg">
+  <form id="frm" method="dialog">
+    <h2 style="font-size:18px">Analyze a contractor</h2>
+    <div class="frow">
+      <label for="fName">Contractor / company name<input type="text" id="fName" required placeholder="e.g. Al Noor Contracting"></label>
+      <label for="fDept">Department
+        <select id="fDept"><option>Maintenance</option><option>Construction</option><option>IT Services</option><option>Electrical</option><option>Mechanical</option></select>
+      </label>
+    </div>
+    <div id="sliders" style="display:grid;gap:12px"></div>
+    <fieldset>
+      <legend>Critical red flags (confirmed)</legend>
+      <div id="flagChecks" style="display:grid;gap:8px"></div>
+    </fieldset>
+    <div class="actions">
+      <button class="btn ghost" type="button" id="cancelBtn">Cancel</button>
+      <button class="btn" type="submit">Run analysis</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Chart.js library, then our script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
